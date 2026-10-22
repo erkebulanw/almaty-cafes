@@ -19,4 +19,4 @@ npm run dev
 npm run build
 
 ## Deploy
-Deployed on Vercel. Live demo: almaty-cafes-7xycomu1z-erkebulan.vercel.app
+Deployed on Vercel. Live demo: [almaty-cafes-7xycomu1z-erkebulan.vercel.app](https://almaty-cafes-7xycomu1z-erkebulan.vercel.app/#/)
