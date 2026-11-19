@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { useCafes } from "../hooks/useCafes.js";
 import useDebounce from "../hooks/useDebounce.js";
 import Filters from "../components/Filters.jsx";
 import CafeList from "../components/CafeList.jsx";
 import Pagination from "../components/Pagination.jsx";
+import CachedNotice from "../components/CachedNotice.jsx";
 import { Loader, ErrorMessage, EmptyState } from "../components/Status.jsx";
 
 const DEFAULT_FILTERS = { search: "", district: "all", type: "all", sort: "rating-desc" };
@@ -23,8 +25,11 @@ export default function HomePage() {
 
   const handleFilters = (next) => {
     setFilters(next);
-    setPage(1); // новые фильтры -> первая страница
+    setPage(1);
   };
+
+  // нет сети и данных нет ни в кеше, ни в памяти -> страница /offline
+  if (isError && error.name === "OfflineError") return <Navigate to="/offline" replace />;
 
   return (
     <>
@@ -33,6 +38,7 @@ export default function HomePage() {
 
       {isError && <ErrorMessage message={error.message} onRetry={() => refetch()} />}
       {!isError && isPending && <Loader />}
+      {!isError && data?.fromCache && <CachedNotice />}
 
       {!isError && data && data.items.length === 0 && (
         <EmptyState title="No cafés match your filters">

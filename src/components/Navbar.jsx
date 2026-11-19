@@ -1,9 +1,24 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Navbar() {
   const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [open, setOpen] = useState(false);
+
+  // закрываем меню при переходе на другую страницу
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  // закрываем меню по клавише Escape
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const handleLogout = async () => {
     await logout();
@@ -14,7 +29,19 @@ export default function Navbar() {
     <header className="navbar">
       <div className="container navbar__inner">
         <NavLink to="/" className="brand">Almaty Cafés</NavLink>
-        <nav>
+
+        <button
+          type="button"
+          className="navbar__toggle"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="main-nav"
+          onClick={() => setOpen((o) => !o)}
+        >
+          <span className="burger" aria-hidden="true" />
+        </button>
+
+        <nav id="main-nav" className={open ? "is-open" : ""} aria-label="Main">
           <NavLink to="/" end>Browse</NavLink>
           <NavLink to="/add">Add a café</NavLink>
           {!loading && (user ? (

@@ -1,23 +1,26 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Profile() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="auth">
       <h1>Profile</h1>
-      <p><b>Email:</b> {user.email}</p>
-      <p><b>UID:</b> {user.uid}</p>
-      <button
-        onClick={async () => {
-          await logout();
-          navigate("/login");
-        }}
-      >
-        Logout
-      </button>
+      <article className="detail">
+        <p><b>Email:</b> {user.email}</p>
+        <p><b>UID:</b> {user.uid}</p>
+        <button
+          className="btn btn--danger"
+          onClick={async () => {
+            await logout();
+            navigate("/login");
+          }}
+        >
+          Logout
+        </button>
+      </article>
     </div>
   );
 }

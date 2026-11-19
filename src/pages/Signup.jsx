@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Signup() {
   const { signup, error, clearError } = useAuth();
@@ -33,18 +33,24 @@ export default function Signup() {
   };
 
   return (
-    <div>
+    <div className="auth">
       <h1>Sign up</h1>
       {(validationError || error) && (
-        <p role="alert" style={{ color: "red" }}>{validationError || error}</p>
+        <p role="alert" className="error">{validationError || error}</p>
       )}
-      <form onSubmit={onSubmit}>
-        <input name="email" type="email" placeholder="Email" value={form.email} onChange={onChange} required />
-        <input name="password" type="password" placeholder="Password" value={form.password} onChange={onChange} required />
-        <input name="confirm" type="password" placeholder="Confirm password" value={form.confirm} onChange={onChange} required />
-        <button disabled={submitting}>Create account</button>
+      <form className="form" onSubmit={onSubmit} noValidate>
+        <label>Email
+          <input name="email" type="email" autoComplete="email" inputMode="email" value={form.email} onChange={onChange} required />
+        </label>
+        <label>Password
+          <input name="password" type="password" autoComplete="new-password" value={form.password} onChange={onChange} required />
+        </label>
+        <label>Confirm password
+          <input name="confirm" type="password" autoComplete="new-password" value={form.confirm} onChange={onChange} required />
+        </label>
+        <button className="btn" disabled={submitting}>{submitting ? "Please wait…" : "Create account"}</button>
       </form>
-      <p>Already have an account? <Link to="/login">Log in</Link></p>
+      <p>Already have an account? <Link to="/login" style={{ textDecoration: "underline" }}>Log in</Link></p>
     </div>
   );
 }

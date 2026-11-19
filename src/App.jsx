@@ -1,12 +1,15 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import ConnectionBadge from "./components/ConnectionBadge.jsx";
+import UpdatePrompt from "./components/UpdatePrompt.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import CafeDetailPage from "./pages/CafeDetailPage.jsx";
 import AddCafePage from "./pages/AddCafePage.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Profile from "./pages/Profile.jsx";
+import OfflinePage from "./pages/OfflinePage.jsx";
 
 export default function App() {
   return (
@@ -27,9 +30,12 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/offline" element={<OfflinePage />} />
           <Route path="*" element={<p className="state">Page not found. Go back to the list of cafés.</p>} />
         </Routes>
       </main>
+      <ConnectionBadge />
+      <UpdatePrompt />
     </>
   );
 }

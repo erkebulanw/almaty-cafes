@@ -1,6 +1,7 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useCafe, useDeleteCafe } from "../hooks/useCafes.js";
 import Rating from "../components/Rating.jsx";
+import CachedNotice from "../components/CachedNotice.jsx";
 import { Loader, ErrorMessage } from "../components/Status.jsx";
 
 export default function CafeDetailPage() {
@@ -15,9 +16,11 @@ export default function CafeDetailPage() {
       await deleteMutation.mutateAsync(id);
       navigate("/");
     } catch {
-      // ошибка отображается ниже через deleteMutation.error
+      // ошибка отображается ниже
     }
   };
+
+  if (isError && error.name === "OfflineError") return <Navigate to="/offline" replace />;
 
   return (
     <>
@@ -25,6 +28,7 @@ export default function CafeDetailPage() {
       {isPending && <Loader text="Loading café…" />}
       {isError && <ErrorMessage message={error.message} />}
       {deleteMutation.isError && <ErrorMessage message={deleteMutation.error.message} />}
+      {cafe?.fromCache && <CachedNotice />}
       {cafe && (
         <article className="detail">
           <h1>{cafe.name}</h1>

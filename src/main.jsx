@@ -11,8 +11,10 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 60 * 1000,
       gcTime: 5 * 60 * 1000,
-      retry: 1,
+      networkMode: "always",
+      retry: (count, error) => error?.name !== "OfflineError" && count < 1,
     },
+    mutations: { networkMode: "always" },
   },
 });
 

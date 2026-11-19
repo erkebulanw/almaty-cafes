@@ -63,3 +63,120 @@ input, select, textarea { font: inherit; padding: 10px 12px; border: 1px solid v
   .filters input[type="search"] { grid-column: 1 / -1; }
   .row { grid-template-columns: 1fr; }
 }
+
+/* =========================================================
+   PWA / Mobile (320px and up)
+   ========================================================= */
+html { -webkit-text-size-adjust: 100%; }
+body { overflow-x: hidden; } /* страховка от горизонтального скролла */
+img, svg, video { max-width: 100%; height: auto; }
+
+/* отступы с учётом "чёлки" телефона в горизонтальной ориентации */
+.container {
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+
+/* длинные слова/ссылки/UID не должны ломать вёрстку */
+.card h3, .card__desc, .muted, .detail, .auth { overflow-wrap: anywhere; }
+
+/* карточки: на 320px помещаются без горизонтального скролла */
+.grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+
+/* touch-friendly: минимум 44px, шрифт 16px чтобы iOS не приближал страницу */
+.btn, input, select, textarea { min-height: 44px; }
+input, select, textarea { font-size: 16px; }
+textarea { min-height: 96px; }
+input[type="checkbox"] { width: 22px; height: 22px; min-height: 22px; }
+.navbar nav a { display: inline-flex; align-items: center; min-height: 44px; }
+.navbar nav { align-items: center; }
+
+/* страницы входа */
+.auth { max-width: 420px; margin: 0 auto; }
+.auth .btn { width: 100%; }
+
+/* кнопка-бургер скрыта на компьютере */
+.navbar__toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.burger, .burger::before, .burger::after {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #fff;
+  transition: transform .2s, background .2s;
+}
+.burger { position: relative; }
+.burger::before, .burger::after { content: ""; position: absolute; left: 0; }
+.burger::before { top: -7px; }
+.burger::after { top: 7px; }
+.navbar__toggle[aria-expanded="true"] .burger { background: transparent; }
+.navbar__toggle[aria-expanded="true"] .burger::before { top: 0; transform: rotate(45deg); }
+.navbar__toggle[aria-expanded="true"] .burger::after { top: 0; transform: rotate(-45deg); }
+
+/* ---------- Телефоны и узкие планшеты ---------- */
+@media (max-width: 760px) {
+  .navbar__inner { flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; }
+  .navbar__toggle { display: inline-flex; }
+
+  /* меню: скрыто, открывается по кнопке, растягивается на всю ширину */
+  .navbar nav {
+    display: none;
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px 0 12px;
+    max-height: calc(100vh - 70px);
+    max-height: calc(100dvh - 70px);
+    overflow-y: auto;
+  }
+  .navbar nav.is-open { display: flex; }
+  .navbar nav a {
+    padding: 0 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, .12);
+  }
+  .navbar nav a.active {
+    opacity: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, .12);
+    border-left: 3px solid #7fd1a8;
+    padding-left: 12px;
+  }
+  .navbar nav .btn { margin-top: 10px; width: 100%; }
+
+  /* снизу запас под индикатор Online/Offline, чтобы он не перекрывал контент */
+  main.container { padding-top: 16px; padding-bottom: 88px; }
+
+  .filters .btn { grid-column: 1 / -1; }
+  .detail { padding: 16px; }
+  .detail .btn { width: 100%; }
+  .success { max-width: 100%; }
+  .pagination { flex-wrap: wrap; gap: 10px; }
+  .pagination .btn { flex: 1 1 120px; }
+  .pagination span { flex-basis: 100%; text-align: center; order: -1; }
+}
+
+/* ---------- Совсем узкие экраны (320-480px) ---------- */
+@media (max-width: 480px) {
+  .filters { grid-template-columns: 1fr; }
+  .form { padding: 16px; }
+  .card a { padding: 14px; }
+  h1 { margin-bottom: 12px; }
+}
+
+/* ---------- Горизонтальная ориентация телефона ---------- */
+@media (max-height: 480px) and (orientation: landscape) {
+  main.container { padding-top: 12px; padding-bottom: 72px; }
+  h1 { font-size: 1.4rem; margin-bottom: 10px; }
+  .navbar__inner { padding-top: 4px; padding-bottom: 4px; }
+  .navbar nav { max-height: calc(100vh - 56px); max-height: calc(100dvh - 56px); }
+}
